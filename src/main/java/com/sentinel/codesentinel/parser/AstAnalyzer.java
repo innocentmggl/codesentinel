@@ -10,6 +10,8 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.expr.BinaryExpr;
 import com.github.javaparser.ast.expr.ConditionalExpr;
+import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
+import com.github.javaparser.ast.nodeTypes.modifiers.NodeWithPublicModifier;
 import com.github.javaparser.ast.stmt.CatchClause;
 import com.github.javaparser.ast.stmt.DoStmt;
 import com.github.javaparser.ast.stmt.ForEachStmt;
@@ -37,10 +39,15 @@ public class AstAnalyzer {
             cu = StaticJavaParser.parse(source);
         } catch (ParseProblemException e) {
             throw new IllegalArgumentException(
-                    "Not valid Java source: " + e.getProblems().get(0).getMessage(), e);
+                    "Not valid Java source: " + e.getProblems().getFirst().getMessage(), e);
         }
 
-        String className = cu.getPrimaryType().map(t -> t.getNameAsString()).orElse("Unknown");
+        String className = cu.getTypes().stream()
+                .filter(NodeWithPublicModifier::isPublic)
+                .findFirst()
+                .or(() -> cu.getTypes().stream().findFirst())
+                .map(NodeWithSimpleName::getNameAsString)
+                .orElse("Unknown");
         String packageName = cu.getPackageDeclaration()
                 .map(PackageDeclaration::getNameAsString).orElse("");
         List<String> imports = cu.getImports().stream()
