@@ -1,0 +1,57 @@
+spring:
+  application:
+    name: codesentinel
+  threads:
+    virtual:
+      enabled: true              # Tomcat request handling on virtual threads
+  servlet:
+    multipart:
+      max-file-size: 2MB
+  http:
+    clients:                     # Spring Boot 4 name (was spring.http.client in Boot 3)
+      connect-timeout: 10s
+      read-timeout: 10m          # local models can take minutes on big files
+  datasource:
+    url: jdbc:postgresql://localhost:5432/sentinel
+    username: postgres
+    password: postgres
+  ai:
+    model:
+      chat: ollama
+      embedding: ollama
+    ollama:
+      base-url: http://localhost:11434
+      chat:                      # Spring AI 2.x: no ".options" level any more
+        model: qwen2.5-coder:7b  # match the model you pulled
+        temperature: 0.1
+        num-ctx: 8192
+      embedding:
+        model: nomic-embed-text
+    vectorstore:
+      pgvector:
+        initialize-schema: true  # creates the vector extension and table
+        dimensions: 768          # MUST match the embedding model
+        index-type: HNSW
+        distance-type: COSINE_DISTANCE
+
+sentinel:
+  llm:
+    max-concurrency: 2           # simultaneous LLM calls; raise for hosted APIs
+  scan:
+    allowed-root: ${user.home}/projects  # /analyze-repo only scans below this folder
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      llm:
+        sliding-window-size: 10
+        minimum-number-of-calls: 5
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 30s
+  retry:
+    instances:
+      llm:
+        max-attempts: 2
+        wait-duration: 2s
+        ignore-exceptions:
+          - io.github.resilience4j.circuitbreaker.CallNotPermittedException

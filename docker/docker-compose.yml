@@ -1,0 +1,22 @@
+services:
+  pgvector:
+    image: pgvector/pgvector:0.8.7-pg18-trixie
+    container_name: sentinel-pgvector
+    environment:
+      POSTGRES_DB: sentinel
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      # PostgreSQL 18 images keep data in a versioned subfolder, so mount the parent folder.
+      - pgdata:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d sentinel"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  pgdata:
+  ollama:
