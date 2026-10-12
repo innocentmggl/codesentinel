@@ -24,7 +24,7 @@ public class BadOrderService {
             Statement s = c.createStatement();
             ResultSet rs = s.executeQuery("SELECT * FROM customers WHERE name = '" + customer + "'");
             if (rs.next()) {
-                if (type == "premium") {
+                if ("premium".equals(type)) {
                     if (qty > 10) {
                         if (discountCode != null) {
                             if (discountCode.equals("SAVE20")) {
