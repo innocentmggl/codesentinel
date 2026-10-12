@@ -13,7 +13,14 @@ public record Finding(
         Integer startLine,
         String title,
         String explanation,
+        String advice,
         String suggestion) {
+
+    /** A finding without separate advice. */
+    public Finding(Severity severity, Integer line, Integer startLine,
+                   String title, String explanation, String suggestion) {
+        this(severity, line, startLine, title, explanation, null, suggestion);
+    }
 
     /** Whether the finding covers more than one line. */
     public boolean spansLines() {

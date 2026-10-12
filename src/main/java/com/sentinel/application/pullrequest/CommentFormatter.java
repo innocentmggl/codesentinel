@@ -22,6 +22,10 @@ class CommentFormatter {
         var body = new StringBuilder("**%s: %s**\n\n%s".formatted(
                 finding.severity(), orEmpty(finding.title()), orEmpty(finding.explanation())));
 
+        if (finding.advice() != null && !finding.advice().isBlank()) {
+            body.append("\n\n**Fix:** ").append(finding.advice().strip());
+        }
+
         if (finding.suggestion() != null && !finding.suggestion().isBlank()) {
             String code = finding.suggestion().stripTrailing();
             String fence = fenceFor(code);
