@@ -58,11 +58,7 @@ public class BadOrderService {
     }
 
     public void removeSmallOrders() {
-        for (Object o : orders) {
-            if ((Double) o < 10) {
-                orders.remove(o);
-            }
-        }
+        orders.removeIf(o -> (Double) o < 10);
     }
 
     @Override
