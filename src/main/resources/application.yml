@@ -1,0 +1,45 @@
+spring:
+  application:
+    name: codesentinel
+  profiles:
+    default: local
+  threads:
+    virtual:
+      enabled: true
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/codesentinel}
+    username: ${DB_USER:codesentinel}
+    password: ${DB_PASSWORD:codesentinel}
+  ai:
+    model:
+      chat: openai
+      embedding: openai
+    vectorstore:
+      pgvector:
+        initialize-schema: true
+        index-type: HNSW
+        distance-type: COSINE_DISTANCE
+  docker:
+    compose:
+      file: ./docker/docker-compose.yml
+
+sentinel:
+  workspace:
+    root: ${user.home}          # local directories to index must be inside this folder
+  index:
+    top-k: 5
+    similarity-threshold: 0.3
+  llm:
+    max-concurrency: 4          # simultaneous model calls; use 1-2 for a local model
+  github:
+    token: ${GITHUB_TOKEN:}
+  pull-request:
+    max-files: 40
+    max-comments: 25
+    min-severity: MINOR
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info

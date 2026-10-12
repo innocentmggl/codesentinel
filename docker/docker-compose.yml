@@ -1,11 +1,14 @@
 services:
   pgvector:
-    image: pgvector/pgvector:0.8.7-pg18-trixie
+    image: pgvector/pgvector:pg17
+    labels:
+      # Lets Spring Boot treat this image as a regular PostgreSQL service connection.
+      org.springframework.boot.service-connection: postgres
     container_name: sentinel-pgvector
     environment:
-      POSTGRES_DB: sentinel
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: codesentinel
+      POSTGRES_USER: codesentinel
+      POSTGRES_PASSWORD: codesentinel
     ports:
       - "5432:5432"
     volumes:
@@ -19,4 +22,3 @@ services:
 
 volumes:
   pgdata:
-  ollama:

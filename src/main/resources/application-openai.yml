@@ -1,0 +1,18 @@
+# OpenAI. Requires OPENAI_API_KEY.
+spring:
+  ai:
+    openai:
+      base-url: https://api.openai.com/v1
+      api-key: ${OPENAI_API_KEY}
+      chat:
+        options:
+          model: ${LLM_MODEL:gpt-4.1-mini}
+          temperature: 0.2
+      embedding:
+        options:
+          model: ${EMBEDDING_MODEL:text-embedding-3-small}
+          dimensions: 768
+    vectorstore:
+      pgvector:
+        table-name: code_chunks_openai
+        dimensions: 768

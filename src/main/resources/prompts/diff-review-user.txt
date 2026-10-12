@@ -1,0 +1,14 @@
+Pull request: {title}
+
+Description:
+{description}
+
+File: {path}
+
+Related code from the base project (context only, may be empty):
+{context}
+
+Report at most {maxFindings} findings.
+
+Diff:
+{diff}

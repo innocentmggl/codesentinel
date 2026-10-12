@@ -1,0 +1,7 @@
+Goal: {goal}
+
+Related code from the same project (context only):
+{context}
+
+Code to refactor:
+{code}

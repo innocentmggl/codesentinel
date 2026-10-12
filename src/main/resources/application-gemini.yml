@@ -1,0 +1,18 @@
+# Google Gemini through its OpenAI-compatible endpoint. Requires GEMINI_API_KEY.
+spring:
+  ai:
+    openai:
+      base-url: https://generativelanguage.googleapis.com/v1beta/openai
+      api-key: ${GEMINI_API_KEY}
+      chat:
+        options:
+          model: ${LLM_MODEL:gemini-2.5-flash}
+          temperature: 0.2
+      embedding:
+        options:
+          model: ${EMBEDDING_MODEL:gemini-embedding-001}
+          dimensions: 768
+    vectorstore:
+      pgvector:
+        table-name: code_chunks_gemini
+        dimensions: 768

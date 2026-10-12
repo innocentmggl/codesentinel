@@ -1,0 +1,19 @@
+# Local Ollama through its OpenAI-compatible endpoint.
+#   ollama pull qwen2.5-coder:7b
+#   ollama pull nomic-embed-text
+spring:
+  ai:
+    openai:
+      base-url: ${OLLAMA_BASE_URL:http://localhost:11434/v1}
+      api-key: ollama                       # Ollama ignores it, but the client requires a value
+      chat:
+        options:
+          model: ${LLM_MODEL:qwen2.5-coder:7b}
+          temperature: 0.2
+      embedding:
+        options:
+          model: ${EMBEDDING_MODEL:nomic-embed-text}
+    vectorstore:
+      pgvector:
+        table-name: code_chunks_local
+        dimensions: 768
