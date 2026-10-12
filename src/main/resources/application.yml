@@ -2,7 +2,7 @@ spring:
   application:
     name: codesentinel
   profiles:
-    default: local
+    default: gemini
   threads:
     virtual:
       enabled: true

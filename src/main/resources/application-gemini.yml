@@ -1,4 +1,9 @@
-# Google Gemini through its OpenAI-compatible endpoint. Requires GEMINI_API_KEY.
+# Google Gemini. Requires GEMINI_API_KEY.
+# Chat goes through Gemini's OpenAI-compatible endpoint. Embeddings use the native Google GenAI client, because
+# the compatible embeddings endpoint omits the "index" field the OpenAI client requires.
+spring.ai.model.embedding: none            # turn the OpenAI embedding client off
+spring.ai.model.embedding.text: google-genai   # turn the native Gemini embedding client on
+
 spring:
   ai:
     openai:
@@ -6,12 +11,16 @@ spring:
       api-key: ${GEMINI_API_KEY}
       chat:
         options:
-          model: ${LLM_MODEL:gemini-2.5-flash}
+          model: ${LLM_MODEL:gemini-3.8-flash}
           temperature: 0.2
-      embedding:
-        options:
-          model: ${EMBEDDING_MODEL:gemini-embedding-001}
-          dimensions: 768
+    google:
+      genai:
+        embedding:
+          api-key: ${GEMINI_API_KEY}
+          text:
+            model: ${EMBEDDING_MODEL:gemini-embedding-001}
+            dimensions: 768
+            task-type: RETRIEVAL_DOCUMENT
     vectorstore:
       pgvector:
         table-name: code_chunks_gemini

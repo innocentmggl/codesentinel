@@ -84,6 +84,11 @@ public class PullRequestReviewService {
         return new PullRequestReviewReport(url, post, reviewUrl, reviewed, List.copyOf(skipped), comments);
     }
 
+    /** @throws InvalidRequestException if no host supports the URL */
+    public void ensureSupported(String url) {
+        hostFor(url);
+    }
+
     private PullRequestHost hostFor(String url) {
         return hosts.stream()
                 .filter(host -> host.supports(url))
